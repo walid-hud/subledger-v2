@@ -112,46 +112,94 @@ Follow this pattern for new endpoints:
 - All request body/params/query validation should happen in `middleware/validate.js` with Zod schemas.
 - Prefer strict object schemas (`.strict()`) to prevent unknown payload fields.
 
-### example: Adding a new route
-1. Define a Zod schema in `schemas/index.js`:
+### Example: Adding a new route (comprehensive)
+
+Use complete snippets with explicit imports and file locations.
+
+1. Add a schema in `schemas/index.js`:
 
 ```javascript
-    createTransactionSchema: z.object({
-      subscriptionId: z.string().length(24),
-      amount: z.number().positive(),
-      name: z.string().max(255),
-      billingCycle: z.enum(["monthly", "yearly"]),
-    }),
-```
-2. Add route in `routes/transactions.js`:
+import z from "zod";
 
-```javascript
-    router.post(
-      "/",
-      validate(createTransactionSchema),
-      requireToken,
-        authenticate,
-        authorize(["user"]),
-        catchAsync(transactionsController.createTransaction)
-    );
+const BillingCycleSchema = z.enum(["monthly", "yearly"]);
+
+export const PostSubscriptionsSchema = z.object({
+  body: z
+    .object({
+      name: z.string().trim().min(1),
+      price: z.number().min(0),
+      billing_cycle: BillingCycleSchema,
+    })
+    .strict(),
+});
 ```
 
-3. Implement controller in `controllers/transactions.js`:
+2. Add route wiring in `routes/subscription.route.js`:
 
 ```javascript
-    async function createTransaction(req, res) {
-      const { subscriptionId, amount, name } = req.body;
-      const userId = req.user.id;
+import { Router } from "express";
+import { authenticate, authorize, requireToken } from "../middleware/auth.js";
+import { validate } from "../middleware/validate.js";
+import { PostSubscriptionsSchema } from "../schemas/index.js";
+import subscriptionController from "../controllers/subscription.controller.js";
 
-      const transaction = await transactionsService.createTransaction({
-        userId,
-        subscriptionId,
-        amount,
-        name,
-      });
+const router = Router();
 
-      sendResponse(res, 201, true, transaction, null, "Transaction created");
-    }
+router.use(requireToken, authenticate, authorize(["user"]));
+
+router.post(
+  "/",
+  validate(PostSubscriptionsSchema),
+  subscriptionController.createSubscription,
+);
+
+export default router;
+```
+
+3. Implement controller in `controllers/subscription.controller.js`:
+
+```javascript
+import { catchAsync } from "../middleware/global.js";
+import { createUserSubscription } from "../services/subscription.service.js";
+import { sendResponse } from "../utils/response.js";
+
+export const createSubscription = catchAsync(async (req, res) => {
+  const userId = String(req.user.id);
+  const created = await createUserSubscription(userId, req.body);
+  return sendResponse(res, 201, created, "Subscription created");
+});
+
+export default {
+  createSubscription,
+};
+```
+
+4. Keep DB logic in service (`services/subscription.service.js`):
+
+```javascript
+import Subscription from "../models/Subscription.model.js";
+import User from "../models/User.model.js";
+import { NotFoundError } from "../utils/errors.js";
+
+export const createUserSubscription = async (userId, payload) => {
+  const user = await User.findById(userId, "_id");
+  if (!user) {
+    throw new NotFoundError("User not found");
+  }
+
+  return await Subscription.create({
+    ...payload,
+    user: user._id,
+  });
+};
+```
+
+5. Mount the router in `index.js`:
+
+```javascript
+import subscriptionRoutes from "./routes/subscription.route.js";
+
+server.use("/subscriptions", subscriptionRoutes);
 ```
 
 
