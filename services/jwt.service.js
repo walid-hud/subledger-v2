@@ -12,6 +12,7 @@ export const verifyToken = (token) => {
 
 export const validateToken = (payload, schema) => {
   const { success, data } = schema.safeParse(payload);
+  console.log(payload)
   if (!success) {
     throw new ValidationError("invalid token data");
   }

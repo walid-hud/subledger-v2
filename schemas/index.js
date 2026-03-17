@@ -33,6 +33,8 @@ export const JwtUserSchema = z
     id: ObjectIdSchema,
     email: z.string(),
     role: RoleSchema,
+    iat: z.number(),
+    exp: z.number()
   })
   .strict();
 

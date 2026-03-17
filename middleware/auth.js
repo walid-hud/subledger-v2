@@ -8,7 +8,8 @@ export const authenticate = async (req, res, next) => {
   const decoded = verifyToken(token);
   if (!decoded) return next(new UnauthorizedError("Invalid token"));
   const user = validateToken(decoded, JwtUserSchema);
-  Object.assign(req, { user });
+  
+  Object.assign(req, { user }); 
   next();
 };
 
@@ -24,6 +25,6 @@ export const authorize = (roles) => {
 export const requireToken = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) return next(new UnauthorizedError("No token provided"));
-  Object.assign(req, { token });
+  Object.assign(req, { token }); 
   next();
 };
