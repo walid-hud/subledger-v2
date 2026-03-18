@@ -1,5 +1,5 @@
 import subscription from "../models/Subscription.model.js";
-import transaction from "../models/Transaction.model.jsgit ";
+import transaction from "../models/Transaction.model.js";
 
 const calculateUserStats = async (userId) => {
     const subscrptions = await subscription.find({ userId }); // Query subscriptions by userId/req.user.id from JWT (authMiddleware).
