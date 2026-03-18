@@ -2,7 +2,7 @@ import subscription from "../models/Subscription.model.js";
 import transaction from "../models/Transaction.model.js";
 
 const calculateUserStats = async (userId) => {
-    const subscrptions = await subscription.find({ userId }); // Query subscriptions by userId/req.user.id from JWT (authMiddleware).
+    const subscrptions = await subscription.find({ user: userId }); // Query subscriptions by userId/req.user.id from JWT (authMiddleware).
 
     // Handle empty results
     if (!subscrptions.length) {
@@ -18,7 +18,7 @@ const calculateUserStats = async (userId) => {
     // Query transactions linked to these subscriptions
 
     const transactions = await transaction.find({
-        subscrptionId: { $in: subscriptionIds },
+        subscription: { $in: subscriptionIds },
     });
 
     const totalSubscriptions = subscrptions.length;
@@ -28,7 +28,8 @@ const calculateUserStats = async (userId) => {
     const cancelledSubscriptions = subscrptions.filter(
         (sub) => sub.status === "cancelled",
     ).length;
-    const totalSpent = transactions.reduce((sum, t) => sum + t.amount, 0);
+    const totalSpent = (transactions.reduce((sum, t) => sum + t.amount, 0)).toFixed(2);
+
 
     return {
         totalSubscriptions,
