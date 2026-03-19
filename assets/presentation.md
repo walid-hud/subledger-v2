@@ -36,3 +36,4 @@ Visual: Bullet points highlighting: Pagination, Statistics Endpoint, and Bonus f
 - EN : "Beyond standard CRUD operations, we implemented pagination and filtering. We also completed the bonus features: a global financial summary endpoint, and a monthly spending limit that warns the user if a new transaction exceeds their budget."
 
 - FR : "Au-delà des opérations CRUD standard, nous avons mis en place la pagination et le filtrage. Nous avons également finalisé les fonctionnalités supplémentaires : un "endpoint" de synthèse financière globale"
+

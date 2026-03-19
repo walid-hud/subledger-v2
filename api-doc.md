@@ -10,6 +10,19 @@
 Authorization: Bearer <token>
 ```
 
+
+## test user
+```js
+```
+{
+  username: 'Flossie.Hegmann',
+  email: 'Reyes.Corwin70@hotmail.com',
+  password:"password",
+  password_hash:'$2b$10$NmAXdeKkrLXBpnsn/5DaaexpLAU9OjS32T.9YqM.RhLVH1y/EIJG2',
+  role: 'user'
+}
+```
+
 ## Standard Response Format
 
 Most endpoints return:
