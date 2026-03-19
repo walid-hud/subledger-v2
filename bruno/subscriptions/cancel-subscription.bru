@@ -1,0 +1,16 @@
+meta {
+  name: Cancel Subscription
+  type: http
+  seq: 6
+}
+
+patch {
+  url: {{baseUrl}}/user/subscriptions/{{subscriptionId}}/cancel
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

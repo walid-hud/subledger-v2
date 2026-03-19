@@ -1,0 +1,16 @@
+meta {
+  name: Get User Transactions
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/user/transactions?page=1&limit=10&status=paid&subscriptionId={{subscriptionId}}
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

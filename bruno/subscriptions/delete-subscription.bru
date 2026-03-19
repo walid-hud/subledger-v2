@@ -1,0 +1,11 @@
+meta {
+  name: Delete Subscription
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/user/subscriptions/{{subscriptionId}}
+  body: none
+  auth: inherit
+}

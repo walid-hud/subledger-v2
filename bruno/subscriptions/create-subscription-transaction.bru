@@ -1,0 +1,23 @@
+meta {
+  name: Create Subscription Transaction
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/user/subscriptions/{{subscriptionId}}/transactions
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "amount": 15.99,
+    "paymentDate": "2026-03-19T10:00:00.000Z",
+    "status": "paid"
+  }
+}

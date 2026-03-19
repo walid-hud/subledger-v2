@@ -1,0 +1,23 @@
+meta {
+  name: Update Subscription
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/user/subscriptions/{{subscriptionId}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Netflix Premium",
+    "price": 29.99,
+    "billing_cycle": "monthly"
+  }
+}

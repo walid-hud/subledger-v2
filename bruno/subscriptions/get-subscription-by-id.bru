@@ -1,0 +1,11 @@
+meta {
+  name: Get Subscription By Id
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/user/subscriptions/{{subscriptionId}}
+  body: none
+  auth: inherit
+}

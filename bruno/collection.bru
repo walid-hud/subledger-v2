@@ -1,0 +1,17 @@
+auth {
+  mode: bearer
+}
+
+auth:bearer {
+  token: {{userToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3000
+  userToken:
+  adminToken:
+  subscriptionId:
+  transactionId:
+  loginEmail: user@example.com
+  loginPassword: secret123
+}
