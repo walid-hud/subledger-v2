@@ -132,7 +132,8 @@ export default {
   deleteSub,
   updateSub,
   getSub,
-  cancelSub
+  cancelSub,
+  getSubWithTransactions
 }
 
 
