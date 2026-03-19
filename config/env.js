@@ -10,7 +10,7 @@ import { config } from "dotenv";
 const envSchema = z.object({
   PORT: z.string().default("3000"),
   MONGODB_URI: z.string(),
-  MONGODB_DB_NAME: z.string().default("subledger_v1"),
+  MONGODB_DB_NAME: z.string().default("subledger_v2"),
   JWT_SECRET_KEY: z.string().min(32, { message: "jwt secret key too short " }),
   JWT_EXPIRES_IN: z.string().default("1h"),
 });
