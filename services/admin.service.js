@@ -67,3 +67,4 @@ export async function getSubscriptionTransactions(userId, subscriptionId) {
         .sort({ paymentDate: -1 })
     return transactions
 }
+
