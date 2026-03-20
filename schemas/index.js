@@ -98,3 +98,11 @@ export const TransactionIdParamsSchema = z.object({
     transactionId: ObjectIdSchema,
   }),
 });
+
+export const SetSpendingLimitSchema = z.object({
+  body: z
+    .object({
+      monthlySpendingLimit: z.number().min(0).nullable(),
+    })
+    .strict(),
+});
