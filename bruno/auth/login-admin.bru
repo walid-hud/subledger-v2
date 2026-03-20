@@ -1,7 +1,7 @@
 meta {
-  name: Login User
+  name: Login Admin
   type: http
-  seq: 2
+  seq: 3
 }
 
 post {
@@ -16,11 +16,11 @@ headers {
 
 body:json {
   {
-    "email": "{{loginEmail}}",
-    "password": "{{loginPassword}}"
+    "email": "{{adminLoginEmail}}",
+    "password": "{{adminLoginPassword}}"
   }
 }
 
 docs {
-  Save data.token from response into userToken variable.
+  Save data.token from response into adminToken variable.
 }

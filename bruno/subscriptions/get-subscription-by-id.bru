@@ -5,7 +5,12 @@ meta {
 }
 
 get {
-  url: {{baseUrl}}/user/subscriptions/{{subscriptionId}}
+  url: {{baseUrl}}/user/subscriptions/{{subscriptionId}}?page={{page}}&limit={{limit}}&status={{transactionStatus}}&fromDate={{fromDate}}&toDate={{toDate}}
   body: none
   auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
 }

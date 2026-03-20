@@ -5,7 +5,7 @@ meta {
 }
 
 get {
-  url: {{baseUrl}}/user/subscriptions/{{subscriptionId}}/transactions?page=1&limit=10&status=paid
+  url: {{baseUrl}}/user/subscriptions/{{subscriptionId}}/transactions?page={{page}}&limit={{limit}}&status={{transactionStatus}}&fromDate={{fromDate}}&toDate={{toDate}}
   body: none
   auth: inherit
 }

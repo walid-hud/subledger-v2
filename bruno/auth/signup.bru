@@ -1,5 +1,5 @@
 meta {
-  name: Signup
+  name: Signup User
   type: http
   seq: 1
 }
@@ -16,9 +16,9 @@ headers {
 
 body:json {
   {
-    "email": "new-admin@example.com",
-    "password": "secret123",
-    "role": "admin",
+    "email": "{{loginEmail}}",
+    "password": "{{loginPassword}}",
+    "role": "user",
     "username": "newuser01"
   }
 }

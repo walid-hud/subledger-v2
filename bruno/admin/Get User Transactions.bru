@@ -1,11 +1,11 @@
 meta {
-  name: Get Profile
+  name: Get User Transactions
   type: http
-  seq: 1
+  seq: 4
 }
 
 get {
-  url: {{baseUrl}}/admin/me
+  url: {{baseUrl}}/admin/users/{{userId}}/transactions
   body: none
   auth: inherit
 }
