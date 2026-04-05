@@ -22,9 +22,41 @@ const buildDateFilter = (fromDate, toDate) => {
   return Object.keys(dateFilter).length > 0 ? dateFilter : undefined;
 };
 
-export const createTransactionForSubscription = async (subscription, payload) => {
+const getMonthlyTotal = async (userId) => {
+  const now = new Date();
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+
+  const subscriptions = await Subscription.find({ user: userId }, { _id: 1 });
+  const subscriptionIds = subscriptions.map((s) => s._id);
+
+  if (subscriptionIds.length === 0) return 0;
+
+  const result = await Transaction.aggregate([
+    {
+      $match: {
+        subscription: { $in: subscriptionIds },
+        paymentDate: { $gte: startOfMonth, $lte: endOfMonth },
+      },
+    },
+    { $group: { _id: null, total: { $sum: "$amount" } } },
+  ]);
+
+  return result.length > 0 ? result[0].total : 0;
+};
+
+export const createTransactionForSubscription = async (subscription, payload, user) => {
   if (subscription.status === "cancelled") {
     throw new ConflictError("Cannot create transactions for a cancelled subscription");
+  }
+
+  let warning = null;
+  if (user?.monthlySpendingLimit != null) {
+    const monthlyTotal = await getMonthlyTotal(user._id);
+    const newTotal = monthlyTotal + payload.amount;
+    if (newTotal > user.monthlySpendingLimit) {
+      warning = `Monthly spending limit exceeded: ${newTotal.toFixed(2)} spent vs limit of ${user.monthlySpendingLimit.toFixed(2)}`;
+    }
   }
 
   const transaction = await Transaction.create({
@@ -34,7 +66,7 @@ export const createTransactionForSubscription = async (subscription, payload) =>
     status: payload.status,
   });
 
-  return transaction;
+  return { transaction, warning };
 };
 
 export const getSubscriptionTransactions = async (subscriptionId, options = {}) => {

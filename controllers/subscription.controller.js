@@ -2,6 +2,7 @@ import { sendResponse } from "../utils/response.js";
 import { catchAsync } from "../middleware/global.js";
 import subscriptionService from "../services/subscription.service.js";
 import transactionService from "../services/transaction.service.js";
+import User from "../models/User.model.js";
 
 const getUserSubscriptions = catchAsync(async (req, res) => {
     const { page, limit, status } = req.query;
@@ -58,11 +59,14 @@ const deleteSubscription = catchAsync(async (req, res) => {
 });
 
 const createTransaction = catchAsync(async (req, res) => {
-    const transaction = await transactionService.createTransactionForSubscription(
+    const user = await User.findById(req.user.id);
+    const { transaction, warning } = await transactionService.createTransactionForSubscription(
         req.subscription,
         req.body,
+        user,
     );
-    sendResponse(res, 201, { transaction }, "Transaction created successfully");
+    const data = warning ? { transaction, warning } : { transaction };
+    sendResponse(res, 201, data, "Transaction created successfully");
 });
 
 const getSubscriptionTransactions = catchAsync(async (req, res) => {

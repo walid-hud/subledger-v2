@@ -23,6 +23,11 @@ const userSchema = new mongoose.Schema({
     default: "user",
     required: true,
   },
+  monthlySpendingLimit: {
+    type: Number,
+    min: 0,
+    default: null,
+  },
 });
 
 const User = mongoose.model("User", userSchema);
